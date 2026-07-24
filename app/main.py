@@ -1,16 +1,22 @@
+from fastapi import HTTPException
 from fastapi import FastAPI
-from redis_client import set_value, get_value
 
 app = FastAPI()
 
-@app.get("/set")
-def set_data(key: str, value: str):
-    """Store a key/value pair in Redis."""
-    success = set_value(key, value)
-    return {"status": "ok" if success else "error"}
+items = ["Docker", "Container", "Kubernetes", "Prometheus", "Redis"]
 
-@app.get("/get")
-def get_data(key: str):
-    """Retrieve a value from Redis."""
-    value = get_value(key)
-    return {"value": value}
+@app.get("/")
+def home():
+    return {"message": "This is a test project"}
+
+@app.get("/again")
+def again():
+    return {"message": "This again"}
+
+@app.get("/items/{item_id}")
+def show_items(item_id: int):
+    if item_id < len(items):
+        return {"items": items[item_id], "id": item_id}
+    else: 
+        raise HTTPException(status_code=404, detail="Item not Found")
+
