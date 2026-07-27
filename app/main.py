@@ -1,13 +1,18 @@
 from fastapi import HTTPException
 from fastapi import FastAPI
+from app.config import settings
 
 app = FastAPI()
 
 items = ["Docker", "Container", "Kubernetes", "Prometheus", "Redis"]
 
 @app.get("/")
-def home():
-    return {"message": "This is a test project"}
+def root():
+    return {
+        "application": settings.APP_NAME,
+        "version": settings.APP_VERSION,
+        "environment": settings.ENVIRONMENT
+}
 
 @app.get("/again")
 def again():
