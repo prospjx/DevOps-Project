@@ -1,6 +1,7 @@
 services:
   fastapi:
     image: python:3.10-slim
+    restart: always
     working_dir: /app
     ports:
       - "8000:8000"
@@ -9,6 +10,11 @@ services:
       - DATABASE_URL=postgresql://postgres:password123@postgresql:5432/tasksdb
     volumes:
       - ../:/app
+    healthcheck:
+      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     depends_on:
       - postgresql
   postgresql:

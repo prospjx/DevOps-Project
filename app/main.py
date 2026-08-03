@@ -1,6 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, status
+from sqlalchemy import text
 from app.config import settings
-from app.models.task import Task
 from app.database import engine, Base
 from app.routes.tasks import router as tasks_router
 
@@ -19,3 +19,13 @@ def root():
         "version": settings.APP_VERSION,
         "environment": settings.ENVIRONMENT
     }
+
+@app.get("/health")
+def get_health():
+    try:
+        # Open a database connection connection to verify health
+        with engine.connect() as connection:
+            connection.execute(text("SELECT 1"))
+        return {"status": "healthy", "database": "connected"}
+    except Exception as e:
+        return Response(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content=str(e))
