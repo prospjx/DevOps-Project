@@ -1,1 +1,27 @@
+services:
+  fastapi:
+    image: python:3.10-slim
+    working_dir: /app
+    ports:
+      - "8000:8000"
+    command: sh -c "pip install -r requirements.txt && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password123@postgresql:5432/tasksdb
+    volumes:
+      - ../:/app
+    depends_on:
+      - postgresql
+  postgresql:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password123
+      - POSTGRES_DB=tasksdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
+volumes:
+  postgres_data:

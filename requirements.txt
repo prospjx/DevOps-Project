@@ -3,3 +3,5 @@ redis[hiredis]
 fastapi
 uvicorn
 pydantic-settings
+sqlalchemy
+psycopg2-binary

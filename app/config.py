@@ -5,7 +5,8 @@ class Settings(BaseSettings):
     APP_VERSION: str = "1.0.0"
     ENVIRONMENT: str = "development"
     DEBUG: bool = True
-
+    DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/postgres"
+    
     class Config:
         env_file = ".env"
 
