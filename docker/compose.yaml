@@ -1,11 +1,11 @@
 services:
   fastapi:
-    image: python:3.10-slim
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     restart: always
-    working_dir: /app
     ports:
       - "8000:8000"
-    command: sh -c "pip install -r requirements.txt && uvicorn app.main:app --host 0.0.0.0 --port 8000"
     environment:
       - DATABASE_URL=postgresql://postgres:password123@postgresql:5432/tasksdb
     volumes:

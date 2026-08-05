@@ -11,11 +11,13 @@ router = APIRouter(prefix="/tasks", tags=["Tasks"])
 class TaskCreate(BaseModel):
     title: str
     description: str | None = None
+    due: str
 
 class TaskResponse(BaseModel):
     id: int
     title: str
     description: str | None
+    due: str
     completed: bool
 
     class Config:
@@ -23,7 +25,7 @@ class TaskResponse(BaseModel):
 
 @router.post("/", response_model=TaskResponse)
 def create_task(task_in: TaskCreate, db: Session = Depends(get_db)):
-    db_task = Task(title=task_in.title, description=task_in.description)
+    db_task = Task(title=task_in.title, description=task_in.description, due=task_in.due)
     db.add(db_task)
     db.commit()
     db.refresh(db_task)
