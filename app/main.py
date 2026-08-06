@@ -16,16 +16,14 @@ app = FastAPI()
 # Registers the database tasks router
 app.include_router(tasks_router)
 
+
 @app.get("/")
 def root():
     applica = os.getenv("APP_NAME")
     versio = os.getenv("APP_VERSION")
     envir = os.getenv("ENVIRONMENT")
-    return {
-        "first": applica,
-        "version": versio,
-        "environment": envir
-    }
+    return {"first": applica, "version": versio, "environment": envir}
+
 
 @app.get("/health")
 def get_health():
