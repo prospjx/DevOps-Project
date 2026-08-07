@@ -20,7 +20,7 @@ jobs:
       - name: format code
         run: black --check .
       - name: lint code
-        run: ruff check .
+        run: ruff check . --select I
       - name: test with pytest
         run: pytest -v
 

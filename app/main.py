@@ -1,9 +1,10 @@
 import os
+
 from dotenv import load_dotenv
 from fastapi import FastAPI, Response, status
 from sqlalchemy import text
-from app.config import settings
-from app.database import engine, Base
+
+from app.database import Base, engine
 from app.routes.tasks import router as tasks_router
 
 load_dotenv()
