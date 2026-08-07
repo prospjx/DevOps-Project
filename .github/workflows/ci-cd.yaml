@@ -40,7 +40,11 @@ jobs:
         run: ruff check . --select I
       - name: test with pytest
         env:
+          APP_NAME: "Task Awesome"
+          APP_VERSION: "3.0.0"
+          ENVIRONMENT: "developmentisago!"
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
         run: pytest -v app/
 
 
