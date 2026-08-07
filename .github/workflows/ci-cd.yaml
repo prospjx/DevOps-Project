@@ -46,6 +46,12 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: pytest -v app/
       - name: Build Docker image
-        run: Docker build -t imain-app -f docker/Dockerfile .
+        run: docker build -t imain-app:latest -f docker/Dockerfile .
+      - name: Push to Docker Hub
+        run: |
+          docker login -u prospjx -p ${{ secrets.DOCKER_PATCODE }}
+          docker push prospjx/imain-app:latest
+      # - name: Push to GHCR
+      #   run: 
 
 
