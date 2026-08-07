@@ -9,3 +9,5 @@ python-dotenv
 ruff
 black
 pytest
+httpx
+httpx2
