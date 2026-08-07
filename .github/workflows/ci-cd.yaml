@@ -44,7 +44,8 @@ jobs:
           APP_VERSION: "3.0.0"
           ENVIRONMENT: "developmentisago!"
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
         run: pytest -v app/
+      - name: Build Docker image
+        run: Docker build -t imain-app -f docker/Dockerfile .
 
 
