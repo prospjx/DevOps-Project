@@ -8,11 +8,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+  # added this
+  services:
+    postgres:
+      image: postgres:16-alpine
+      env:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: password123
+        POSTGRES_DB: tasksdb
+      ports:
+        - 5432:5432
+      options: >-
+        --health-cmd pg_isready
+        --health-interval 10s
+        --health-timeout 5s
+        --health-retries 5
+    # added this
+
     steps: 
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Python Environment
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - name: install dependencies
@@ -22,6 +39,8 @@ jobs:
       - name: lint code
         run: ruff check . --select I
       - name: test with pytest
-        run: pytest -v
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: pytest -v app/
 
 
