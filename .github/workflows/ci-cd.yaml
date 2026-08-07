@@ -18,7 +18,7 @@ jobs:
       - name: install dependencies
         run: pip install -r requirements.txt
       - name: format code
-        run: black .
+        run: black --check .
       - name: lint code
         run: ruff check .
       - name: test with pytest
