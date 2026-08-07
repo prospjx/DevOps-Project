@@ -46,7 +46,7 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: pytest -v app/
       - name: Build Docker image
-        run: docker build -t imain-app:latest -f docker/Dockerfile .
+        run: docker build -t prospjx/imain-app:latest -f docker/Dockerfile .
       - name: Push to Docker Hub
         run: |
           docker login -u prospjx -p ${{ secrets.DOCKER_PATCODE }}
