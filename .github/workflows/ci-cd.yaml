@@ -1,1 +1,23 @@
+name: CI-CD
+
+on:
+  push:
+    branches: main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: install dependencies
+        run: pip install -r requirements.txt
+      - name: format code
+        run: black .
+      - name: lint code
+        run: ruff check . --fix
+      - name: test with pytest
+        run: pytest -v
+
 
