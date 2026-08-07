@@ -6,3 +6,6 @@ pydantic-settings
 sqlalchemy
 psycopg2-binary
 python-dotenv
+ruff
+black
+pytest
