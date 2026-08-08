@@ -62,7 +62,7 @@ jobs:
       
       - name: Build, Login and Push to GHCR
         run: |
-          IMAGE_ID = prospjx/(echo ${{github.repository}}) | tr '[:upper:]' '[:lower:]')/imain-app:latest
+          IMAGE_ID = prospjx/$(echo ${{github.repository}}) | tr '[:upper:]' '[:lower:]')/imain-app:latest
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io --username {{ github.actor }} --password-stdin
           docker build -t $IMAGE_ID -f docker/Dockerfile .
           docker push $IMAGE_ID
