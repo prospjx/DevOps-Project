@@ -17,9 +17,9 @@ jobs:
       postgres:
         image: postgres:16-alpine
         env:
-          - POSTGRES_USER=postgres
-          - POSTGRES_PASSWORD=password123
-          - POSTGRES_DB=tasksdb
+          POSTGRES_USER: "postgres"
+          POSTGRES_PASSWORD: "password123"
+          POSTGRES_DB: "tasksdb"
         ports:
           - 5432:5432
         options: >- 
@@ -63,7 +63,7 @@ jobs:
       - name: Build, Login and Push to GHCR
         run: |
           IMAGE_ID = prospjx/(echo ${{github.repository}}) | tr '[:upper:]' '[:lower:]')/imain-app:latest
-          echo ${{ GITHUB_TOKEN }} | docker login ghcr.io --username {{ github.actor }} --password-stdin
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io --username {{ github.actor }} --password-stdin
           docker build -t $IMAGE_ID -f docker/Dockerfile .
           docker push $IMAGE_ID
       
