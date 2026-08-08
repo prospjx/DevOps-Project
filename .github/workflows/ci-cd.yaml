@@ -11,7 +11,7 @@ jobs:
   
   permissions:
     content: write
-    packages: write
+    package: write
   
   services:
     name: postgres
