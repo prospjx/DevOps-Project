@@ -74,13 +74,30 @@ jobs:
           docker login -u prospjx -p ${{ secrets.DOCKER_PATCODE }}
           docker push prospjx/imain-app:latest
 
+      - name: Login into GHCR
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io --username ${{ github.actor }} --password-stdin
 
-      - name: Login to GHCR
-        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
-      - name: Build and push to GHCR
+      - name: Build and Push to GHCR
         run: |
-          IMAGE_ID=ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/imain-app:latest
-          docker build -t $IMAGE_ID -f docker/Dockerfile .
+          IMAGE_ID= ghcr.io/echo ${{ github.repository }}|[tr [:upper:] [:lower:]]/imain-app:latest
+          docker build -t $IMAGE_ID -f docker/Dockerfile
           docker push $IMAGE_ID
+
+
+
+
+
+
+
+
+
+
+      # - name: Login to GHCR
+      #   run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      # - name: Build and push to GHCR
+      #   run: |
+      #     IMAGE_ID=ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/imain-app:latest
+      #     docker build -t $IMAGE_ID -f docker/Dockerfile .
+      #     docker push $IMAGE_ID
 
