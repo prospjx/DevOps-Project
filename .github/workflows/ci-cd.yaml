@@ -30,10 +30,10 @@ jobs:
     
     steps:
       - name: Checkout
-        run: actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Setup Python Environment
-        run: actions/setup-python@v5
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
@@ -51,11 +51,10 @@ jobs:
           APP_NAME: "Task Awesome"
           APP_VERSION: "3.0.0"
           ENVIRONMENT: "developmentisago!"
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: pytest -v app/
 
       - name: Login, Build and Push to Docker Hub
-        env:
-          - DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           docker build -t prospjx/imain-app:latest -f docker/Dockerfile .
           docker login -u prospjx -p ${{ secrets.DOCKER_PATCODE }}
