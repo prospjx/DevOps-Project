@@ -4,3 +4,21 @@ __pycache__/
 .env
 .venv/
 venv/
+
+# Local directory for Terraform
+.terraform/
+
+# State files
+*.tfstate
+*.tfstate.backup
+
+# Variables files containing credentials
+terraform.tfvars
+*.tfvars
+*.tfvars.json
+
+# Local overrides
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
