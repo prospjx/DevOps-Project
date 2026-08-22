@@ -1,1 +1,11 @@
-
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fast-api-config
+  namespace: fast-api
+data:
+  POSTGRES_DB: "tasksdb"
+  POSTGRES_USER: "postgres"
+  APP_NAME: "Task Awesome"
+  APP_VERSION: "3.0.0"
+  ENVIRONMENT: "developmentisago!"

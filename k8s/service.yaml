@@ -1,1 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: fast-api-service
+  namespace: fast-api
+  labels:
+    app: fast-api-application
+spec:
+  selector:
+    app: fast-api-application
+  ports:
+    - port: 8000
+      protocol: TCP
+      targetPort: 8000
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: fast-api
+spec:
+  selector:
+    app: postgres
+  ports:
+    - port: 5432
+      targetPort: 5432

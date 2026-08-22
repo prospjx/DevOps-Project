@@ -1,1 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fast-api-deployment
+  namespace: fast-api
+  labels:
+    app: fast-api-application
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fast-api-application
+  template:
+    metadata:
+      labels:
+        app: fast-api-application
+    spec:
+      containers:
+        - name: fast-api-application
+          image: ghcr.io/prospjx/devops-project/imain-app:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: APP_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: fast-api-config
+                  key: APP_NAME
 
+            - name: APP_VERSION
+              valueFrom:
+                configMapKeyRef:
+                  name: fast-api-config
+                  key: APP_VERSION
+
+            - name: ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: fast-api-config
+                  key: ENVIRONMENT
+
+            - name: DATABASE_URL
+              value: postgresql://postgres:password123@postgres-service:5432/tasksdb

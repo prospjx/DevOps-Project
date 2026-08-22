@@ -1,0 +1,79 @@
+<svg width="1400" height="800" viewBox="0 0 1400 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">FastAPI Task Management Architecture</title>
+  <desc id="desc">Diagram showing the user, FastAPI application, PostgreSQL database, Docker Compose, Terraform, and Kubernetes/AWS deployment.</desc>
+
+  <defs>
+    <style>
+      .title { font: 700 34px 'Segoe UI', Arial, sans-serif; fill: #1f2937; }
+      .label { font: 600 20px 'Segoe UI', Arial, sans-serif; fill: #111827; }
+      .small { font: 500 16px 'Segoe UI', Arial, sans-serif; fill: #374151; }
+      .box { fill: #f8fafc; stroke: #2563eb; stroke-width: 2.5; rx: 18; }
+      .db { fill: #eff6ff; stroke: #1d4ed8; stroke-width: 2.5; rx: 18; }
+      .infra { fill: #ecfeff; stroke: #0f766e; stroke-width: 2.5; rx: 18; }
+      .outer { fill: none; stroke: #cbd5e1; stroke-width: 2; rx: 22; }
+      .arrow { stroke: #475569; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
+      .dashed { stroke-dasharray: 10 10; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect x="40" y="30" width="1320" height="740" class="outer" />
+  <text x="700" y="82" text-anchor="middle" class="title">Task Management Application Architecture</text>
+
+  <!-- User / Client -->
+  <rect x="120" y="180" width="200" height="140" class="box"/>
+  <text x="220" y="235" text-anchor="middle" class="label">Client / User</text>
+  <text x="220" y="265" text-anchor="middle" class="small">Browser or API</text>
+  <text x="220" y="290" text-anchor="middle" class="small">Consumer</text>
+
+  <!-- FastAPI App -->
+  <rect x="420" y="150" width="300" height="210" class="box"/>
+  <text x="570" y="205" text-anchor="middle" class="label">FastAPI App</text>
+  <text x="570" y="240" text-anchor="middle" class="small">app/main.py</text>
+  <text x="570" y="270" text-anchor="middle" class="small">Routes: /, /health, /tasks</text>
+  <text x="570" y="300" text-anchor="middle" class="small">SQLAlchemy + Pydantic</text>
+  <text x="570" y="330" text-anchor="middle" class="small">Swagger UI</text>
+
+  <!-- PostgreSQL -->
+  <rect x="820" y="180" width="260" height="170" class="db"/>
+  <text x="950" y="235" text-anchor="middle" class="label">PostgreSQL</text>
+  <text x="950" y="270" text-anchor="middle" class="small">Database: tasksdb</text>
+  <text x="950" y="300" text-anchor="middle" class="small">Stores tasks and metadata</text>
+
+  <!-- Docker Compose -->
+  <rect x="420" y="440" width="300" height="170" class="infra"/>
+  <text x="570" y="492" text-anchor="middle" class="label">Docker Compose</text>
+  <text x="570" y="525" text-anchor="middle" class="small">fastapi service</text>
+  <text x="570" y="555" text-anchor="middle" class="small">postgresql service</text>
+  <text x="570" y="585" text-anchor="middle" class="small">docker/compose.yaml</text>
+
+  <!-- Terraform / Infra -->
+  <rect x="820" y="440" width="300" height="170" class="infra"/>
+  <text x="970" y="492" text-anchor="middle" class="label">Terraform + Cloud</text>
+  <text x="970" y="525" text-anchor="middle" class="small">AWS EC2 / infra resources</text>
+  <text x="970" y="555" text-anchor="middle" class="small">main.tf, variables.tf</text>
+  <text x="970" y="585" text-anchor="middle" class="small">Deployment automation</text>
+
+  <!-- K8s -->
+  <rect x="1060" y="120" width="220" height="180" class="infra"/>
+  <text x="1170" y="170" text-anchor="middle" class="label">Kubernetes</text>
+  <text x="1170" y="205" text-anchor="middle" class="small">k8s/deployment.yaml</text>
+  <text x="1170" y="235" text-anchor="middle" class="small">Service + ConfigMap</text>
+  <text x="1170" y="265" text-anchor="middle" class="small">Secret + resources</text>
+
+  <!-- Arrows -->
+  <line x1="320" y1="250" x2="420" y2="250" class="arrow"/>
+  <line x1="720" y1="250" x2="820" y2="250" class="arrow"/>
+  <line x1="570" y1="360" x2="570" y2="440" class="arrow dashed"/>
+  <line x1="970" y1="350" x2="970" y2="440" class="arrow dashed"/>
+  <line x1="1020" y1="270" x2="1060" y2="250" class="arrow"/>
+
+  <!-- Small notes -->
+  <text x="330" y="225" class="small">HTTP</text>
+  <text x="750" y="225" class="small">Query / persist</text>
+  <text x="610" y="405" class="small">Containerized runtime</text>
+  <text x="1000" y="405" class="small">Infra provisioning</text>
+  <text x="1030" y="235" class="small">K8s deploy</text>
+</svg>
