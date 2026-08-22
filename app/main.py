@@ -23,7 +23,8 @@ def root():
     applica = os.getenv("APP_NAME")
     versio = os.getenv("APP_VERSION")
     envir = os.getenv("ENVIRONMENT")
-    return {"first": applica, "version": versio, "environment": envir}
+    testing = "Fast Api Version 2"
+    return {"first": applica, "version": versio, "environment": envir, "version": testing}
 
 
 @app.get("/health")
