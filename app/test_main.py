@@ -12,7 +12,6 @@ def test_root():
     assert data["first"] == "Task Awesome"
     assert data["version"] == "3.0.0"
     assert data["environment"] == "developmentisago!"
-    assert data["version"] == "Fast Api Version 2"
 
 
 def test_get_health():

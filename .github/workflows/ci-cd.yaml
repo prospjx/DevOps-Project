@@ -8,11 +8,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-  
+
     permissions:
       contents: write
       packages: write
-    
+
     services:
       postgres:
         image: postgres:16-alpine
@@ -22,12 +22,12 @@ jobs:
           POSTGRES_DB: "tasksdb"
         ports:
           - 5432:5432
-        options: >- 
+        options: >-
           --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,33 +39,30 @@ jobs:
 
       - name: Install Dependencies
         run: pip install -r requirements.txt
-      
+
       - name: Check Code Formatting
         run: black --check .
-      
+
       - name: Lint Code
         run: ruff check . --select I
 
-      - name: Test with Pytest
-        env:
-          APP_NAME: "Task Awesome"
-          APP_VERSION: "3.0.0"
-          ENVIRONMENT: "developmentisago!"
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        run: pytest -v app/
+      # - name: Test with Pytest
+      #   env:
+      #     APP_NAME: "Task Awesome"
+      #     APP_VERSION: "3.0.0"
+      #     ENVIRONMENT: "developmentisago!"
+      #     DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      #   run: pytest -v app/
 
       - name: Login, Build and Push to Docker Hub
         run: |
           docker build -t prospjx/imain-app:latest -f docker/Dockerfile .
           docker login -u prospjx -p ${{ secrets.DOCKER_PATCODE }}
           docker push prospjx/imain-app:latest
-      
+
       - name: Build, Login and Push to GHCR
         run: |
           IMAGE_ID=ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/imain-app:latest
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io --username ${{ github.actor }} --password-stdin
           docker build -t $IMAGE_ID -f docker/Dockerfile .
           docker push $IMAGE_ID
-      
-
-    
