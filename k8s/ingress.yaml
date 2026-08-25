@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fast-api-ingress
+  namespace: fast-api
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fast-api-service
+                port:
+                  number: 8000
+    # tls:
+    #   - hosts:
+    #     - api.myapp.com
+    #     secretName: myapp-tls

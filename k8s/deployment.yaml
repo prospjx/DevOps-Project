@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: fast-api-application
-          image: ghcr.io/prospjx/devops-project/imain-app:does-not-exist
+          image: ghcr.io/prospjx/devops-project/imain-app:v2
           ports:
             - containerPort: 8000
           env:
