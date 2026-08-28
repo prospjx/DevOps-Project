@@ -9,7 +9,8 @@ spec:
   selector:
     app: fast-api-application
   ports:
-    - port: 8000
+    - name: http
+      port: 8000
       protocol: TCP
       targetPort: 8000
 
