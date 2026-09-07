@@ -48,7 +48,7 @@ Key highlights of this project:
 ## Project Structure
 
 ```text
-fastapi-redis-app/
+fastapi-app/
 ├── app/
 │   ├── __init__.py
 │   ├── config.py
@@ -284,6 +284,3 @@ The GitHub Actions workflow automates quality gates and deployment artifacts on 
 - [x] Database persistence with PostgreSQL
 - [x] Prometheus metrics & Grafana integration
 - [x] Kubernetes manifests (Deployment, Services, Ingress, ServiceMonitor)
-- [ ] Add Redis caching layer for read-heavy task endpoints
-- [ ] Helm chart packaging for simplified Kubernetes deployment
-- [ ] Automated staging deployment in CI/CD pipeline
