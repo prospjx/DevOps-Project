@@ -1,79 +1,181 @@
-<svg width="1400" height="800" viewBox="0 0 1400 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">FastAPI Task Management Architecture</title>
-  <desc id="desc">Diagram showing the user, FastAPI application, PostgreSQL database, Docker Compose, Terraform, and Kubernetes/AWS deployment.</desc>
-
+<svg width="1200" height="740" viewBox="0 0 1200 740" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <style>
-      .title { font: 700 34px 'Segoe UI', Arial, sans-serif; fill: #1f2937; }
-      .label { font: 600 20px 'Segoe UI', Arial, sans-serif; fill: #111827; }
-      .small { font: 500 16px 'Segoe UI', Arial, sans-serif; fill: #374151; }
-      .box { fill: #f8fafc; stroke: #2563eb; stroke-width: 2.5; rx: 18; }
-      .db { fill: #eff6ff; stroke: #1d4ed8; stroke-width: 2.5; rx: 18; }
-      .infra { fill: #ecfeff; stroke: #0f766e; stroke-width: 2.5; rx: 18; }
-      .outer { fill: none; stroke: #cbd5e1; stroke-width: 2; rx: 22; }
-      .arrow { stroke: #475569; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
-      .dashed { stroke-dasharray: 10 10; }
+      .title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; font-weight: 700; font-size: 22px; fill: #111827; }
+      .section-label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; font-weight: 700; font-size: 13px; fill: #4B5563; text-transform: uppercase; letter-spacing: 0.8px; }
+      .card-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; font-weight: 600; font-size: 15px; fill: #1F2937; }
+      .card-sub { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; font-weight: 500; font-size: 12px; fill: #6B7280; }
+      .code-line { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; font-size: 11px; fill: #374151; }
+      .edge-label { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; font-weight: 600; font-size: 11px; fill: #4B5563; }
+      
+      .box { fill: #FFFFFF; stroke: #D1D5DB; stroke-width: 1.5; rx: 8; }
+      .box-primary { fill: #FFFFFF; stroke: #2563EB; stroke-width: 2; rx: 8; }
+      .box-container { fill: #F9FAFB; stroke: #E5E7EB; stroke-width: 1.5; rx: 12; }
+      
+      .line { stroke: #4B5563; stroke-width: 1.5; fill: none; marker-end: url(#arrow); }
+      .line-dashed { stroke: #6B7280; stroke-width: 1.5; stroke-dasharray: 4 4; fill: none; marker-end: url(#arrow); }
     </style>
-    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
-      <path d="M0,0 L0,6 L9,3 z" fill="#475569" />
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 2 L 7 5 L 0 8 z" fill="#4B5563"/>
     </marker>
   </defs>
 
-  <rect x="40" y="30" width="1320" height="740" class="outer" />
-  <text x="700" y="82" text-anchor="middle" class="title">Task Management Application Architecture</text>
+  <!-- Clean Background -->
+  <rect width="1200" height="740" fill="#FFFFFF"/>
 
-  <!-- User / Client -->
-  <rect x="120" y="180" width="200" height="140" class="box"/>
-  <text x="220" y="235" text-anchor="middle" class="label">Client / User</text>
-  <text x="220" y="265" text-anchor="middle" class="small">Browser or API</text>
-  <text x="220" y="290" text-anchor="middle" class="small">Consumer</text>
+  <!-- Title Header -->
+  <g transform="translate(50, 40)">
+    <text x="0" y="0" class="title">System Architecture</text>
+    <text x="0" y="22" class="card-sub">FastAPI application, database, monitoring, CI/CD pipeline, and deployment models</text>
+  </g>
 
-  <!-- FastAPI App -->
-  <rect x="420" y="150" width="300" height="210" class="box"/>
-  <text x="570" y="205" text-anchor="middle" class="label">FastAPI App</text>
-  <text x="570" y="240" text-anchor="middle" class="small">app/main.py</text>
-  <text x="570" y="270" text-anchor="middle" class="small">Routes: /, /health, /tasks</text>
-  <text x="570" y="300" text-anchor="middle" class="small">SQLAlchemy + Pydantic</text>
-  <text x="570" y="330" text-anchor="middle" class="small">Swagger UI</text>
+  <!-- ==================== ROW 1: RUNTIME APPLICATION & MONITORING ==================== -->
+  <g transform="translate(50, 90)">
+    <rect x="0" y="0" width="1100" height="280" class="box-container"/>
+    <text x="24" y="28" class="section-label">Application Runtime &amp; Observability (Docker Compose)</text>
 
-  <!-- PostgreSQL -->
-  <rect x="820" y="180" width="260" height="170" class="db"/>
-  <text x="950" y="235" text-anchor="middle" class="label">PostgreSQL</text>
-  <text x="950" y="270" text-anchor="middle" class="small">Database: tasksdb</text>
-  <text x="950" y="300" text-anchor="middle" class="small">Stores tasks and metadata</text>
+    <!-- 1. Client -->
+    <g transform="translate(30, 60)">
+      <rect x="0" y="0" width="140" height="180" class="box"/>
+      <text x="70" y="32" text-anchor="middle" class="card-title">Client</text>
+      <text x="70" y="50" text-anchor="middle" class="card-sub">Web / API Consumer</text>
+      <line x1="16" y1="65" x2="124" y2="65" stroke="#E5E7EB" stroke-width="1"/>
+      <text x="20" y="90" class="code-line">• Browser</text>
+      <text x="20" y="112" class="code-line">• Postman / cURL</text>
+      <text x="20" y="134" class="code-line">• Swagger UI</text>
+      <text x="20" y="156" class="code-line">  (/docs)</text>
+    </g>
 
-  <!-- Docker Compose -->
-  <rect x="420" y="440" width="300" height="170" class="infra"/>
-  <text x="570" y="492" text-anchor="middle" class="label">Docker Compose</text>
-  <text x="570" y="525" text-anchor="middle" class="small">fastapi service</text>
-  <text x="570" y="555" text-anchor="middle" class="small">postgresql service</text>
-  <text x="570" y="585" text-anchor="middle" class="small">docker/compose.yaml</text>
+    <!-- 2. FastAPI API -->
+    <g transform="translate(230, 50)">
+      <rect x="0" y="0" width="260" height="200" class="box-primary"/>
+      <text x="130" y="30" text-anchor="middle" class="card-title">FastAPI Service</text>
+      <text x="130" y="48" text-anchor="middle" class="card-sub">Python 3.12 · Port 8000</text>
+      <line x1="16" y1="60" x2="244" y2="60" stroke="#E5E7EB" stroke-width="1"/>
+      
+      <text x="20" y="82" class="code-line">GET  /health (DB Check)</text>
+      <text x="20" y="104" class="code-line">POST /tasks/ (Create task)</text>
+      <text x="20" y="126" class="code-line">GET  /tasks/ (List tasks)</text>
+      <text x="20" y="148" class="code-line">GET  /metrics (Prometheus)</text>
+      <text x="20" y="172" class="code-line">SQLAlchemy + Pydantic</text>
+    </g>
 
-  <!-- Terraform / Infra -->
-  <rect x="820" y="440" width="300" height="170" class="infra"/>
-  <text x="970" y="492" text-anchor="middle" class="label">Terraform + Cloud</text>
-  <text x="970" y="525" text-anchor="middle" class="small">AWS EC2 / infra resources</text>
-  <text x="970" y="555" text-anchor="middle" class="small">main.tf, variables.tf</text>
-  <text x="970" y="585" text-anchor="middle" class="small">Deployment automation</text>
+    <!-- 3. PostgreSQL Database -->
+    <g transform="translate(550, 60)">
+      <rect x="0" y="0" width="220" height="180" class="box"/>
+      <text x="110" y="32" text-anchor="middle" class="card-title">PostgreSQL</text>
+      <text x="110" y="50" text-anchor="middle" class="card-sub">Database · Port 5432</text>
+      <line x1="16" y1="65" x2="204" y2="65" stroke="#E5E7EB" stroke-width="1"/>
+      <text x="20" y="90" class="code-line">Database: tasksdb</text>
+      <text x="20" y="114" class="code-line">Table: tasks</text>
+      <text x="20" y="138" class="code-line">Storage Volume:</text>
+      <text x="20" y="156" class="code-line">  postgres_data</text>
+    </g>
 
-  <!-- K8s -->
-  <rect x="1060" y="120" width="220" height="180" class="infra"/>
-  <text x="1170" y="170" text-anchor="middle" class="label">Kubernetes</text>
-  <text x="1170" y="205" text-anchor="middle" class="small">k8s/deployment.yaml</text>
-  <text x="1170" y="235" text-anchor="middle" class="small">Service + ConfigMap</text>
-  <text x="1170" y="265" text-anchor="middle" class="small">Secret + resources</text>
+    <!-- 4. Monitoring: Prometheus & Grafana -->
+    <g transform="translate(830, 50)">
+      <rect x="0" y="0" width="240" height="200" class="box"/>
+      <text x="120" y="28" text-anchor="middle" class="card-title">Observability</text>
+      <text x="120" y="46" text-anchor="middle" class="card-sub">Metrics &amp; Dashboards</text>
+      <line x1="16" y1="58" x2="224" y2="58" stroke="#E5E7EB" stroke-width="1"/>
 
-  <!-- Arrows -->
-  <line x1="320" y1="250" x2="420" y2="250" class="arrow"/>
-  <line x1="720" y1="250" x2="820" y2="250" class="arrow"/>
-  <line x1="570" y1="360" x2="570" y2="440" class="arrow dashed"/>
-  <line x1="970" y1="350" x2="970" y2="440" class="arrow dashed"/>
-  <line x1="1020" y1="270" x2="1060" y2="250" class="arrow"/>
+      <!-- Prometheus box -->
+      <rect x="16" y="70" width="208" height="52" rx="4" fill="#F3F4F6" stroke="#E5E7EB"/>
+      <text x="26" y="90" class="card-title" font-size="13">Prometheus (:9090)</text>
+      <text x="26" y="108" class="code-line">Scrapes :8000/metrics</text>
 
-  <!-- Small notes -->
-  <text x="330" y="225" class="small">HTTP</text>
-  <text x="750" y="225" class="small">Query / persist</text>
-  <text x="610" y="405" class="small">Containerized runtime</text>
-  <text x="1000" y="405" class="small">Infra provisioning</text>
-  <text x="1030" y="235" class="small">K8s deploy</text>
+      <!-- Grafana box -->
+      <rect x="16" y="132" width="208" height="52" rx="4" fill="#F3F4F6" stroke="#E5E7EB"/>
+      <text x="26" y="152" class="card-title" font-size="13">Grafana (:3000)</text>
+      <text x="26" y="170" class="code-line">Visualizes system metrics</text>
+    </g>
+
+    <!-- Connectors inside Row 1 -->
+    <!-- Client -> FastAPI -->
+    <line x1="170" y1="140" x2="230" y2="140" class="line"/>
+    <text x="178" y="132" class="edge-label">HTTP</text>
+
+    <!-- FastAPI -> PostgreSQL -->
+    <line x1="490" y1="140" x2="550" y2="140" class="line"/>
+    <text x="498" y="132" class="edge-label">SQL</text>
+
+    <!-- FastAPI -> Prometheus (Scrape) -->
+    <path d="M 490 170 C 650 170, 720 110, 830 110" class="line-dashed"/>
+    <text x="660" y="145" class="edge-label">Scrapes metrics</text>
+
+    <!-- Prometheus -> Grafana -->
+    <line x1="950" y1="122" x2="950" y2="132" class="line"/>
+  </g>
+
+  <!-- ==================== ROW 2: AUTOMATION, K8S, TERRAFORM ==================== -->
+  <g transform="translate(50, 400)">
+    
+    <!-- Box 1: CI/CD Pipeline -->
+    <g transform="translate(0, 0)">
+      <rect x="0" y="0" width="340" height="290" class="box-container"/>
+      <text x="20" y="28" class="section-label">CI/CD Pipeline</text>
+      <text x="20" y="48" class="card-sub">GitHub Actions (.github/workflows)</text>
+      <line x1="20" y1="62" x2="320" y2="62" stroke="#E5E7EB" stroke-width="1"/>
+
+      <g transform="translate(20, 75)">
+        <rect x="0" y="0" width="300" height="42" rx="6" class="box"/>
+        <text x="14" y="24" class="code-line">1. Quality: Black &amp; Ruff check</text>
+
+        <rect x="0" y="52" width="300" height="42" rx="6" class="box"/>
+        <text x="14" y="76" class="code-line">2. Test: Pytest with PostgreSQL service</text>
+
+        <rect x="0" y="104" width="300" height="42" rx="6" class="box"/>
+        <text x="14" y="128" class="code-line">3. Build: Docker container image</text>
+
+        <rect x="0" y="156" width="300" height="42" rx="6" class="box"/>
+        <text x="14" y="180" class="code-line">4. Push: Docker Hub &amp; GHCR</text>
+      </g>
+    </g>
+
+    <!-- Box 2: Kubernetes Manifests -->
+    <g transform="translate(380, 0)">
+      <rect x="0" y="0" width="340" height="290" class="box-container"/>
+      <text x="20" y="28" class="section-label">Kubernetes Orchestration</text>
+      <text x="20" y="48" class="card-sub">Manifests in k8s/</text>
+      <line x1="20" y1="62" x2="320" y2="62" stroke="#E5E7EB" stroke-width="1"/>
+
+      <g transform="translate(20, 75)">
+        <rect x="0" y="0" width="300" height="46" rx="6" class="box"/>
+        <text x="14" y="20" class="card-title" font-size="13">Workloads</text>
+        <text x="14" y="36" class="code-line">deployment.yaml, postgres.yaml</text>
+
+        <rect x="0" y="56" width="300" height="46" rx="6" class="box"/>
+        <text x="14" y="76" class="card-title" font-size="13">Networking</text>
+        <text x="14" y="92" class="code-line">service.yaml, ingress.yaml</text>
+
+        <rect x="0" y="112" width="300" height="46" rx="6" class="box"/>
+        <text x="14" y="132" class="card-title" font-size="13">Config &amp; Monitoring</text>
+        <text x="14" y="148" class="code-line">configmap.yaml, secret.yaml, servicemonitor.yaml</text>
+      </g>
+    </g>
+
+    <!-- Box 3: Terraform Infrastructure -->
+    <g transform="translate(760, 0)">
+      <rect x="0" y="0" width="340" height="290" class="box-container"/>
+      <text x="20" y="28" class="section-label">Cloud Infrastructure</text>
+      <text x="20" y="48" class="card-sub">Terraform Provisioning (AWS)</text>
+      <line x1="20" y1="62" x2="320" y2="62" stroke="#E5E7EB" stroke-width="1"/>
+
+      <g transform="translate(20, 75)">
+        <rect x="0" y="0" width="300" height="46" rx="6" class="box"/>
+        <text x="14" y="20" class="card-title" font-size="13">Network Foundation</text>
+        <text x="14" y="36" class="code-line">aws_vpc, aws_subnet, aws_internet_gateway</text>
+
+        <rect x="0" y="56" width="300" height="46" rx="6" class="box"/>
+        <text x="14" y="76" class="card-title" font-size="13">Security</text>
+        <text x="14" y="92" class="code-line">aws_security_group (Ports 80, 443, 8000, 22)</text>
+
+        <rect x="0" y="112" width="300" height="46" rx="6" class="box"/>
+        <text x="14" y="132" class="card-title" font-size="13">Compute</text>
+        <text x="14" y="148" class="code-line">aws_instance (EC2 Linux), aws_eip</text>
+      </g>
+    </g>
+
+  </g>
 </svg>
