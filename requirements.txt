@@ -4,6 +4,7 @@ fastapi
 uvicorn
 pydantic-settings
 sqlalchemy
+psycopg[binary]
 psycopg2-binary
 python-dotenv
 prometheus-client
