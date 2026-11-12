@@ -144,6 +144,7 @@ This launches:
 | :--- | :--- | :--- |
 | **API Root** | `http://localhost:8000/` | Application metadata and environment info |
 | **Swagger UI** | `http://localhost:8000/docs` | Interactive OpenAPI documentation |
+| **Task Frontend** | `http://localhost:8000/ui/` | Browser interface for managing tasks |
 | **Health Check** | `http://localhost:8000/health` | Service and database connectivity check |
 | **Metrics** | `http://localhost:8000/metrics` | Prometheus metrics endpoint |
 | **Prometheus UI** | `http://localhost:9090` | Prometheus metric explorer & query console |
@@ -152,6 +153,12 @@ This launches:
 ---
 
 ## API Documentation
+
+## Browser frontend
+
+Open `http://localhost:8000/ui/` to use the task-management interface. It supports
+creating, listing, editing, and deleting tasks through the API. The frontend is a
+static page served by FastAPI and requires no separate build step.
 
 ### `GET /`
 Returns service metadata loaded from environment variables.

@@ -50,6 +50,13 @@ def test_health():
     assert response.json() == {"status": "healthy", "database": "connected"}
 
 
+def test_frontend_is_available():
+    response = client.get("/ui/")
+
+    assert response.status_code == 200
+    assert "Task Management" in response.text
+
+
 def test_create_and_read_task():
     created = create_task()
 

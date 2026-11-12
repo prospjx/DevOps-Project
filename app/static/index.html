@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Task Management</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #172033;
+        --muted: #64748b;
+        --line: #dbe3ef;
+        --surface: #ffffff;
+        --background: #f4f7fb;
+        --accent: #2563eb;
+        --accent-dark: #1d4ed8;
+        --danger: #b42318;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      body { margin: 0; color: var(--ink); background: var(--background); }
+      header {
+        padding: 2.5rem max(1.25rem, calc((100% - 1080px) / 2));
+        color: white;
+        background: linear-gradient(135deg, #172554, #2563eb);
+      }
+      header p { margin: .5rem 0 0; color: #dbeafe; }
+      main {
+        display: grid;
+        grid-template-columns: minmax(260px, 340px) 1fr;
+        gap: 1.25rem;
+        max-width: 1080px;
+        margin: 1.5rem auto;
+        padding: 0 1.25rem;
+      }
+      .panel {
+        padding: 1.25rem;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: 0 8px 24px rgb(15 23 42 / 5%);
+      }
+      h1, h2 { margin: 0; }
+      h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+      h2 { font-size: 1.1rem; }
+      label { display: block; margin-top: 1rem; font-size: .85rem; font-weight: 700; }
+      input, textarea {
+        width: 100%;
+        margin-top: .4rem;
+        padding: .7rem .75rem;
+        color: var(--ink);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        font: inherit;
+      }
+      textarea { min-height: 100px; resize: vertical; }
+      button {
+        border: 0;
+        border-radius: 8px;
+        padding: .65rem .9rem;
+        color: white;
+        background: var(--accent);
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      button:hover { background: var(--accent-dark); }
+      button.secondary { color: var(--ink); background: #e8eef8; }
+      button.danger { color: var(--danger); background: #fff1f0; }
+      .form-actions, .toolbar, .task-actions {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+      }
+      .form-actions { margin-top: 1.2rem; }
+      .toolbar { justify-content: space-between; margin-bottom: 1rem; }
+      #status { min-height: 1.25rem; margin: .8rem 0 0; color: var(--danger); font-size: .9rem; }
+      #task-list { display: grid; gap: .75rem; }
+      .task {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+      }
+      .task h3 { margin: 0 0 .35rem; font-size: 1rem; }
+      .task p { margin: .25rem 0; color: var(--muted); font-size: .9rem; }
+      .task.completed h3 { color: var(--muted); text-decoration: line-through; }
+      .task-actions { flex-shrink: 0; align-items: flex-start; }
+      .empty { color: var(--muted); text-align: center; padding: 2rem 1rem; }
+      @media (max-width: 720px) {
+        main { grid-template-columns: 1fr; }
+        .task { flex-direction: column; }
+        .task-actions { align-items: stretch; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Task Management</h1>
+      <p>Create, update, complete, and remove tasks from one simple workspace.</p>
+    </header>
+    <main>
+      <section class="panel">
+        <h2 id="form-title">Add a task</h2>
+        <form id="task-form">
+          <input id="task-id" type="hidden" />
+          <label for="title">Title</label>
+          <input id="title" maxlength="200" required />
+          <label for="description">Description</label>
+          <textarea id="description" maxlength="2000"></textarea>
+          <label for="due">Due date</label>
+          <input id="due" type="date" required />
+          <label>
+            <input id="completed" type="checkbox" />
+            Completed
+          </label>
+          <div class="form-actions">
+            <button type="submit">Save task</button>
+            <button id="cancel-edit" class="secondary" type="button" hidden>Cancel</button>
+          </div>
+          <p id="status" role="status"></p>
+        </form>
+      </section>
+      <section class="panel">
+        <div class="toolbar">
+          <h2>Your tasks</h2>
+          <button id="refresh" class="secondary" type="button">Refresh</button>
+        </div>
+        <div id="task-list" aria-live="polite"></div>
+      </section>
+    </main>
+    <script>
+      const form = document.querySelector("#task-form");
+      const list = document.querySelector("#task-list");
+      const status = document.querySelector("#status");
+      const cancelEdit = document.querySelector("#cancel-edit");
+      const formTitle = document.querySelector("#form-title");
+      const taskId = document.querySelector("#task-id");
+
+      function showStatus(message = "", isError = true) {
+        status.textContent = message;
+        status.style.color = isError ? "var(--danger)" : "var(--accent-dark)";
+      }
+
+      async function request(url, options = {}) {
+        const response = await fetch(url, {
+          headers: { "Content-Type": "application/json" },
+          ...options,
+        });
+        if (!response.ok) {
+          const error = await response.json().catch(() => ({}));
+          throw new Error(error.detail || "The request failed.");
+        }
+        return response.status === 204 ? null : response.json();
+      }
+
+      function renderTasks(tasks) {
+        list.replaceChildren();
+        if (!tasks.length) {
+          list.innerHTML = '<div class="empty">No tasks yet. Add your first one.</div>';
+          return;
+        }
+        tasks.forEach((task) => {
+          const item = document.createElement("article");
+          item.className = `task${task.completed ? " completed" : ""}`;
+          item.innerHTML = `
+            <div>
+              <h3>${escapeHtml(task.title)}</h3>
+              <p>${escapeHtml(task.description || "No description")}</p>
+              <p>Due ${task.due} · ${task.completed ? "Completed" : "Open"}</p>
+            </div>
+            <div class="task-actions">
+              <button class="secondary" data-edit="${task.id}" type="button">Edit</button>
+              <button class="danger" data-delete="${task.id}" type="button">Delete</button>
+            </div>`;
+          list.appendChild(item);
+        });
+      }
+
+      function escapeHtml(value) {
+        return value.replace(/[&<>"']/g, (character) => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+        }[character]));
+      }
+
+      async function loadTasks() {
+        try {
+          renderTasks(await request("/tasks/"));
+          showStatus("", false);
+        } catch (error) {
+          showStatus(error.message);
+        }
+      }
+
+      function resetForm() {
+        form.reset();
+        taskId.value = "";
+        formTitle.textContent = "Add a task";
+        cancelEdit.hidden = true;
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const id = taskId.value;
+        const payload = {
+          title: document.querySelector("#title").value,
+          description: document.querySelector("#description").value || null,
+          due: document.querySelector("#due").value,
+          completed: document.querySelector("#completed").checked,
+        };
+        try {
+          await request(id ? `/tasks/${id}` : "/tasks/", {
+            method: id ? "PUT" : "POST",
+            body: JSON.stringify(payload),
+          });
+          resetForm();
+          showStatus("Task saved.", false);
+          await loadTasks();
+        } catch (error) {
+          showStatus(error.message);
+        }
+      });
+
+      list.addEventListener("click", async (event) => {
+        const editId = event.target.dataset.edit;
+        const deleteId = event.target.dataset.delete;
+        try {
+          if (editId) {
+            const task = await request(`/tasks/${editId}`);
+            taskId.value = task.id;
+            document.querySelector("#title").value = task.title;
+            document.querySelector("#description").value = task.description || "";
+            document.querySelector("#due").value = task.due;
+            document.querySelector("#completed").checked = task.completed;
+            formTitle.textContent = "Edit task";
+            cancelEdit.hidden = false;
+            document.querySelector("#title").focus();
+          }
+          if (deleteId) {
+            await request(`/tasks/${deleteId}`, { method: "DELETE" });
+            await loadTasks();
+          }
+        } catch (error) {
+          showStatus(error.message);
+        }
+      });
+
+      cancelEdit.addEventListener("click", resetForm);
+      document.querySelector("#refresh").addEventListener("click", loadTasks);
+      loadTasks();
+    </script>
+  </body>
+</html>

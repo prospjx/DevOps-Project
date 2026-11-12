@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request, Response, status
+from fastapi.staticfiles import StaticFiles
 from prometheus_client import CONTENT_TYPE_LATEST, Counter, generate_latest
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
@@ -46,6 +47,7 @@ async def catch_all(request: Request, exc: Exception):
 
 # Registers the database tasks router
 app.include_router(tasks_router)
+app.mount("/ui", StaticFiles(directory="app/static", html=True), name="frontend")
 
 
 @app.get("/")
