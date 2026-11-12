@@ -121,6 +121,10 @@ PostgreSQL database such as Neon, Supabase, or Railway.
    vercel --prod
    ```
 
+If `DATABASE_URL` is not configured, the deployment uses `/tmp/tasks.db` only
+to allow the function to start. That storage is temporary and is not suitable
+for real task data; configure hosted PostgreSQL before using the application.
+
 You can also configure `DATABASE_URL` in the Vercel project dashboard under
 **Settings → Environment Variables**. After deployment, use:
 

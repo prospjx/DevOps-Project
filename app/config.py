@@ -1,3 +1,5 @@
+import os
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -12,3 +14,6 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+if os.getenv("VERCEL") and not os.getenv("DATABASE_URL"):
+    settings.DATABASE_URL = "sqlite:////tmp/tasks.db"
