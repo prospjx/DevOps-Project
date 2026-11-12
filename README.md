@@ -60,6 +60,8 @@ fastapi-app/
 │   ├── routes/
 │   │   └── tasks.py
 │   └── schemas/
+├── api/
+│   └── index.py
 ├── docker/
 │   ├── Dockerfile
 │   ├── compose.yaml
@@ -85,6 +87,46 @@ fastapi-app/
 ├── requirements.txt
 └── README.md
 ```
+
+## Deploying to Vercel
+
+This repository includes a Vercel Python entry point in [`api/index.py`](api/index.py)
+and deployment configuration in [`vercel.json`](vercel.json).
+
+### Important database requirement
+
+Vercel functions use an ephemeral, read-only filesystem. The local SQLite fallback
+is suitable for development only; it must not be used for a deployed application
+because task data will not persist between function instances. Use a hosted
+PostgreSQL database such as Neon, Supabase, or Railway.
+
+### Deploy with the Vercel CLI
+
+1. Create a hosted PostgreSQL database and copy its connection string.
+2. Install and log in to Vercel:
+   ```bash
+   npm install -g vercel
+   vercel login
+   ```
+3. From the repository root, deploy:
+   ```bash
+   vercel
+   ```
+4. Add the database connection string:
+   ```bash
+   vercel env add DATABASE_URL production
+   ```
+   Paste the PostgreSQL URL when prompted, then deploy production:
+   ```bash
+   vercel --prod
+   ```
+
+You can also configure `DATABASE_URL` in the Vercel project dashboard under
+**Settings → Environment Variables**. After deployment, use:
+
+- `https://your-project.vercel.app/ui/` for the frontend
+- `https://your-project.vercel.app/docs` for Swagger
+- `https://your-project.vercel.app/health` for the health check
 
 ---
 
