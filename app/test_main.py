@@ -1,7 +1,6 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from app.config import settings
 from app.database import Base, SessionLocal, engine
 from app.main import app
 from app.models.task import Task
@@ -33,14 +32,10 @@ def create_task(title="Finish project proposal"):
 
 
 def test_root():
-    response = client.get("/")
+    response = client.get("/", follow_redirects=False)
 
-    assert response.status_code == 200
-    assert response.json() == {
-        "first": settings.APP_NAME,
-        "version": settings.APP_VERSION,
-        "environment": settings.ENVIRONMENT,
-    }
+    assert response.status_code == 307
+    assert response.headers["location"] == "/ui/"
 
 
 def test_health():

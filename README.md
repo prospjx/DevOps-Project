@@ -188,7 +188,7 @@ This launches:
 
 | Service / Endpoint | URL | Description |
 | :--- | :--- | :--- |
-| **API Root** | `http://localhost:8000/` | Application metadata and environment info |
+| **Application** | `http://localhost:8000/` | Redirects to the task-management frontend |
 | **Swagger UI** | `http://localhost:8000/docs` | Interactive OpenAPI documentation |
 | **Task Frontend** | `http://localhost:8000/ui/` | Browser interface for managing tasks |
 | **Health Check** | `http://localhost:8000/health` | Service and database connectivity check |
@@ -207,16 +207,7 @@ creating, listing, editing, and deleting tasks through the API. The frontend is 
 static page served by FastAPI and requires no separate build step.
 
 ### `GET /`
-Returns service metadata loaded from environment variables.
-
-**Response (`200 OK`):**
-```json
-{
-  "first": "Task Management API",
-  "version": "1.0.0",
-  "environment": "development"
-}
-```
+Redirects to the task-management frontend at `/ui/`.
 
 ---
 

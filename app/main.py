@@ -1,12 +1,12 @@
 from pathlib import Path
 
 from fastapi import FastAPI, Request, Response, status
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from prometheus_client import CONTENT_TYPE_LATEST, Counter, generate_latest
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
-from app.config import settings
 from app.database import Base, engine
 from app.routes.tasks import router as tasks_router
 
@@ -56,13 +56,9 @@ app.mount(
 )
 
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 def root():
-    return {
-        "first": settings.APP_NAME,
-        "version": settings.APP_VERSION,
-        "environment": settings.ENVIRONMENT,
-    }
+    return RedirectResponse(url="/ui/", status_code=status.HTTP_307_TEMPORARY_REDIRECT)
 
 
 @app.get("/health")
