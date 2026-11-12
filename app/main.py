@@ -1,15 +1,11 @@
-import os
-
-from dotenv import load_dotenv
 from fastapi import FastAPI, Request, Response, status
 from prometheus_client import CONTENT_TYPE_LATEST, Counter, generate_latest
 from sqlalchemy import text
-from starlette.middleware.base import BaseHTTPMiddleware
+from sqlalchemy.exc import SQLAlchemyError
 
+from app.config import settings
 from app.database import Base, engine
 from app.routes.tasks import router as tasks_router
-
-load_dotenv()
 
 # Creates the tables in your database
 Base.metadata.create_all(bind=engine)
@@ -54,10 +50,11 @@ app.include_router(tasks_router)
 
 @app.get("/")
 def root():
-    applica = os.getenv("APP_NAME")
-    versio = os.getenv("APP_VERSION")
-    envir = os.getenv("ENVIRONMENT")
-    return {"first": applica, "version": versio, "environment": envir}
+    return {
+        "first": settings.APP_NAME,
+        "version": settings.APP_VERSION,
+        "environment": settings.ENVIRONMENT,
+    }
 
 
 @app.get("/health")
@@ -67,7 +64,7 @@ def get_health():
         with engine.connect() as connection:
             connection.execute(text("SELECT 1"))
         return {"status": "healthy", "database": "connected"}
-    except Exception as e:
+    except SQLAlchemyError as e:
         return Response(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, content=str(e))
 
 

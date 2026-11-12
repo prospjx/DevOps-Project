@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://postgres:password123@postgresql:5432/tasksdb
+      - DATABASE_URL=postgresql+psycopg://postgres:password123@postgresql:5432/tasksdb
     volumes:
       - ../:/app
     healthcheck:
@@ -17,7 +17,7 @@ services:
       retries: 5
     depends_on:
       - postgresql
-  
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -25,7 +25,7 @@ services:
       - ./prometheus.yaml:/etc/prometheus/prometheus.yml:ro
     ports:
       - '9090:9090'
-  
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana

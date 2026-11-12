@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import Boolean, Column, Date, Integer, String
 
 from app.database import Base
 
@@ -8,5 +8,5 @@ class Task(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False, index=True)
     description = Column(String, nullable=True)
-    due = Column(String, nullable=False)
-    completed = Column(Boolean, default=False)
+    due = Column(Date, nullable=False)
+    completed = Column(Boolean, default=False, nullable=False)

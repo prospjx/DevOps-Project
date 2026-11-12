@@ -118,7 +118,7 @@ Default contents:
 APP_NAME=Task Management API
 APP_VERSION=1.0.0
 ENVIRONMENT=development
-DATABASE_URL=postgresql://postgres:password123@postgresql:5432/tasksdb
+DATABASE_URL=postgresql+psycopg://postgres:password123@localhost:5432/tasksdb
 ```
 
 > [!NOTE]
@@ -192,7 +192,7 @@ Creates a new task.
 }
 ```
 
-**Response (`200 OK`):**
+**Response (`201 Created`):**
 ```json
 {
   "id": 1,
@@ -207,6 +207,7 @@ Creates a new task.
 
 ### `GET /tasks/`
 Retrieves a paginated list of tasks. Supports query parameters `skip` and `limit`.
+`limit` must be between 1 and 100.
 
 **Response (`200 OK`):**
 ```json
@@ -220,6 +221,25 @@ Retrieves a paginated list of tasks. Supports query parameters `skip` and `limit
   }
 ]
 ```
+
+### `GET /tasks/{task_id}`
+Retrieves one task by ID. Returns `404 Not Found` when the task does not exist.
+
+### `PUT /tasks/{task_id}`
+Replaces a task, including its completion status.
+
+**Request Body (`application/json`):**
+```json
+{
+  "title": "Finish project proposal",
+  "description": "Final draft approved",
+  "due": "2026-08-20",
+  "completed": true
+}
+```
+
+### `DELETE /tasks/{task_id}`
+Deletes a task and returns `204 No Content`. Returns `404 Not Found` when the task does not exist.
 
 ---
 
